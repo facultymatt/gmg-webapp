@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useCallback } from "react";
-import { range, map } from "lodash";
+import { range, map, isUndefined } from "lodash";
 import GrillStatusContext from "../contexts/GrillStatusContext";
 
 import {
@@ -29,10 +29,18 @@ function App() {
     })),
     [recent]
   );
+  // @todo look at how Riley did this in SPEAR
   const filtered3 = useCallback(
     map(recent, ({ timestamp, fanModeActive }) => ({
       x: timestamp,
-      y: fanModeActive ? 600 : 0,
+      y: fanModeActive === true ? 600 : 0,
+    })),
+    [recent]
+  );
+  const filtered4 = useCallback(
+    map(recent, ({ timestamp, isOn }) => ({
+      x: timestamp,
+      y: isOn === true ? 600 : 0,
     })),
     [recent]
   );
@@ -59,6 +67,9 @@ function App() {
             onNearestX={(value) => {
               setValue(value);
             }}
+            getNull={(d) => {
+              return d.y !== null;
+            }}
           />
           <LineSeries
             data={filtered2}
@@ -66,9 +77,22 @@ function App() {
             onNearestX={(value) => {
               setValue2(value);
             }}
+            getNull={(d) => {
+              return d.y !== null && d.y > 0;
+            }}
           />
           <LineSeries
             data={filtered3}
+            yDomain={yDomain}
+            getNull={(d) => {
+              return d.y === 600;
+            }}
+          />
+          <LineSeries
+            getNull={(d) => {
+              return d.y === 600;
+            }}
+            data={filtered4}
             yDomain={yDomain}
           />
           {value && (
@@ -80,13 +104,27 @@ function App() {
             </Crosshair>
           )}
           <DiscreteColorLegend
-            items={["currentGrillTemp", "desiredGrillTemp", "fanModeActive"]}
+            items={[
+              "currentGrillTemp",
+              "desiredGrillTemp",
+              "fanModeActive",
+              "isOn",
+            ]}
             orientation="horizontal"
           />
         </FlexibleXYPlot>
       </>
     ),
-    [filtered, filtered2, filtered3, tickValues, value, value2, yDomain]
+    [
+      filtered,
+      filtered2,
+      filtered3,
+      filtered4,
+      tickValues,
+      value,
+      value2,
+      yDomain,
+    ]
   );
 }
 
