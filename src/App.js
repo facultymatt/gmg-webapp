@@ -9,6 +9,7 @@ function App() {
     () => (
       <GrillStatusContextProvider>
         <RecentGrillStatusGraph />
+        {/* <NivoGraphTest /> */}
       </GrillStatusContextProvider>
     ),
     []

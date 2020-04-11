@@ -6,7 +6,7 @@ export const GrillStatusSyncContext = createContext({});
 export const GrillStatusSyncContextProvider = ({ children }) => {
   useEffect(() => {
     const db = new PouchDB("grill_local");
-    const remoteDb = new PouchDB("http://localhost:5984/grill");
+    const remoteDb = new PouchDB("http://localhost:5984/pork_test_1");
     db.sync(remoteDb, {
       live: true,
     })

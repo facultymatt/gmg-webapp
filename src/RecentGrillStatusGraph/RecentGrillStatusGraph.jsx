@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useCallback } from "react";
-import { range, map, isUndefined } from "lodash";
+import { range, map } from "lodash";
 import GrillStatusContext from "../contexts/GrillStatusContext";
 
 import {

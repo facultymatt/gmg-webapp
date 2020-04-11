@@ -6,12 +6,13 @@ export const GrillStatusContext = createContext({});
 export const GrillStatusContextProvider = ({ children }) => {
   const [recent, setRecent] = useState([]);
   useEffect(() => {
-    const db = new PouchDB("http://localhost:5984/grill");
+    const db = new PouchDB("http://localhost:5984/pork_test_1");
     console.log(db);
     const getRecent = () => {
       db.allDocs({
         include_docs: true,
-        limit: 500,
+        skip: 2500,
+        limit: 7200,
         descending: true,
       }).then((data) => {
         setRecent(data.rows.map(({ doc }) => doc).reverse());
