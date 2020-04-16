@@ -1,3 +1,6 @@
+// @note this does not work in react-vis because components
+// need to be directly nested under their parent to get the correct props
+// injected :(
 import React, { useContext, useCallback, useMemo } from "react";
 import GrillStatusContext from "../../contexts/GrillStatusContext";
 import { get, map } from "lodash";

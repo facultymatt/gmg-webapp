@@ -1,7 +1,6 @@
-import React, { useContext, useMemo, useState, useCallback } from "react";
+import React, { useContext, useMemo } from "react";
 import { range, map, get } from "lodash";
 import GrillStatusContext from "../contexts/GrillStatusContext";
-import CustomLineSeries from "../components/CustomLineSeries";
 
 import {
   FlexibleXYPlot,
@@ -10,27 +9,34 @@ import {
   VerticalGridLines,
   XAxis,
   YAxis,
-  Crosshair,
   DiscreteColorLegend,
 } from "react-vis";
 
 function App() {
   const { recent } = useContext(GrillStatusContext);
   const metrics = [
-    "currentGrillTemp",
-    "desiredGrillTemp",
-    // "currentProbe1Temp",
-    "desiredProbe1Temp",
-    // "currentProbe2Temp",
-    "desiredProbe2Temp",
-    // "fanModeActive",
-    // "isOn",
+    { metric: "currentGrillTemp" },
+    { metric: "desiredGrillTemp" },
+    { metric: "currentProbe1Temp" },
+    { metric: "desiredProbe1Temp" },
+    { metric: "currentProbe2Temp" },
+    { metric: "desiredProbe2Temp" },
+    {
+      metric: "fanModeActive",
+      getY: (d) => (d.fanModeActive ? 600 : 0),
+      getNull: (d) => d.y === 600,
+    },
+    {
+      metric: "isOn",
+      getY: (d) => (d.isOn ? 600 : 0),
+      getNull: (d) => d.y === 600,
+    },
   ];
   const filteredData = {};
-  metrics.forEach((metric) => {
+  metrics.forEach(({ metric, getY }) => {
     filteredData[metric] = map(recent, (pt) => ({
       x: get(pt, "timestamp"),
-      y: get(pt, metric),
+      y: getY ? getY(pt) : get(pt, metric),
     }));
   });
   const tickValues = range(0, 600, 100);
@@ -38,50 +44,25 @@ function App() {
   return useMemo(
     () => (
       <>
-        <FlexibleXYPlot
-          xType="time"
-          height={200}
-          // getX={(d) => d.timestamp}
-          // getY={(d) => d}
-        >
+        <FlexibleXYPlot xType="time" height={200}>
           <HorizontalGridLines />
           <VerticalGridLines />
           <XAxis />
           <YAxis width={100} tickValues={tickValues} yDomain={yDomain} />
-          {metrics.map((metric) => {
+          {metrics.map(({ metric, getNull = () => true }) => {
             return (
               <LineSeries
+                key={metric}
                 data={filteredData[metric]}
                 yDomain={yDomain}
-                // getNull={(d) => {
-                //   return d.y === 600;
-                // }}
+                getNull={getNull}
               />
             );
           })}
-          {/* neSeries
-            data={filtered3}
-            yDomain={yDomain}
-            getNull={(d) => {
-              return d.y === 600;
-            }}
+          <DiscreteColorLegend
+            items={metrics.map(({ metric }) => metric)}
+            orientation="horizontal"
           />
-          <LineSeries
-            getNull={(d) => {
-              return d.y === 600;
-            }}
-            data={filtered4}
-            yDomain={yDomain}
-          /> */}
-          {/* {value && (
-            <Crosshair values={[value]}>
-              <div style={{ background: "black" }}>
-                <p>currentGrillTemp: {value.y}</p>
-                <p>desiredGrillTemp: {value2.y}</p>
-              </div>
-            </Crosshair>
-          )} */}
-          <DiscreteColorLegend items={metrics} orientation="horizontal" />
         </FlexibleXYPlot>
       </>
     ),
