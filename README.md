@@ -1,21 +1,20 @@
+![Graph generating using this project](./readme_images/brisket_cook_2.png)
 
-# Todo
+## Dev Setup
 
-- improve style on lines and make them easy to read
-- improve refresh time with data reduction over the wire
+- Install node 12
+- Setup and run the `gmg-js` project
+- Install this project deps `npm i`
+- Configure `.env`
+- start `npm start`
+- visit `http://localhost:3001/` and see a graph! If you configured it correctly a line graph should appear. If not, check `.env` and try again.
 
-- prevent accidental grill commands to command urls
-- better way to see start and stop range on single graph from cook. Does not need to be realtime. Could refresh every 10 seconds, for ex. 
-- better utilize height of page to make it easier to see differences in scale - probe temp is always 200 ish or less while grill sometimes gets set at 500 - makes it hard to see the details in probe temp
+## Adjusting chart
 
-- UI to visualize all the status bits - pizza mode, current debug dump
-- UI with buttons to turn on / off the command API features
+See src/RecentGrillStatusGraph/RecentGrillStatusGraph.jsx and you can add / remove metrics to the graph. The metric name should match the value in database. 
 
-- Use temperature of grill before cook to measure ambient temp outside. (trey feedback)
-- Can we get better temperate data in realtime or over time? 
+On line 43 you can set the chart yDomain, which is currently 220 `const yDomain = [0, 220];`. Set to `const yDomain = [0, 500];` for example if you are running the grill hot and want to see the grill temp on the chart.
 
+## Adjusting data
 
-# Sending SMS
-
-- https://textbelt.com/
-- others? 
+See src/contexts/GrillStatusContext.jsx. The most common adjustments will be limit and skip and wheter to record live changes. This can also be set in the `.env` file.
