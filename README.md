@@ -3,7 +3,7 @@
 ## Dev Setup
 
 - Install node 12
-- Setup and run the `gmg-js` project
+- Setup and run the `gmg-js` project https://github.com/facultymatt/gmg-js
 - Install this project deps `npm i`
 - Configure `.env`
 - start `npm start`
@@ -13,8 +13,8 @@
 
 See src/RecentGrillStatusGraph/RecentGrillStatusGraph.jsx and you can add / remove metrics to the graph. The metric name should match the value in database. 
 
-On line 43 you can set the chart yDomain, which is currently 220 `const yDomain = [0, 220];`. Set to `const yDomain = [0, 500];` for example if you are running the grill hot and want to see the grill temp on the chart.
+On line 43 you can set the chart yDomain, which is currently 220 `const yDomain = [0, 220];`. Set `const yDomain = [0, 500];` for example if you are running the grill hot and want to see the grill temp on the chart.
 
 ## Adjusting data
 
-See src/contexts/GrillStatusContext.jsx. The most common adjustments will be limit and skip and wheter to record live changes. This can also be set in the `.env` file.
+See src/contexts/GrillStatusContext.jsx. The most common adjustments will be limit and skip and whether to record live changes. This can also be set in the `.env` file.
