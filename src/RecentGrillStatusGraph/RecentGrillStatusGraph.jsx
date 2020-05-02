@@ -19,18 +19,18 @@ function App() {
     { metric: "desiredGrillTemp" },
     { metric: "currentProbe1Temp" },
     { metric: "desiredProbe1Temp" },
-    { metric: "currentProbe2Temp" },
-    { metric: "desiredProbe2Temp" },
-    {
-      metric: "fanModeActive",
-      getY: (d) => (d.fanModeActive ? 600 : 0),
-      getNull: (d) => d.y === 600,
-    },
-    {
-      metric: "isOn",
-      getY: (d) => (d.isOn ? 600 : 0),
-      getNull: (d) => d.y === 600,
-    },
+    // { metric: "currentProbe2Temp" },
+    // { metric: "desiredProbe2Temp" },
+    // {
+    //   metric: "fanModeActive",
+    //   getY: (d) => (d.fanModeActive ? 600 : 0),
+    //   getNull: (d) => d.y === 600,
+    // },
+    // {
+    //   metric: "isOn",
+    //   getY: (d) => (d.isOn ? 600 : 0),
+    //   getNull: (d) => d.y === 600,
+    // },
   ];
   const filteredData = {};
   metrics.forEach(({ metric, getY }) => {
@@ -40,7 +40,7 @@ function App() {
     }));
   });
   const tickValues = range(0, 600, 100);
-  const yDomain = [0, 600];
+  const yDomain = [0, 220];
   return useMemo(
     () => (
       <>

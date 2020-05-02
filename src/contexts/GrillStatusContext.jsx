@@ -6,25 +6,25 @@ export const GrillStatusContext = createContext({});
 export const GrillStatusContextProvider = ({ children }) => {
   const [recent, setRecent] = useState([]);
   useEffect(() => {
-    const db = new PouchDB("http://localhost:5984/chicken_test_1");
+    const db = new PouchDB("http://localhost:5984/real_brisket");
     console.log(db);
     const getRecent = () => {
       db.allDocs({
         include_docs: true,
         skip: 0,
-        limit: 6000,
+        limit: 29000,
         descending: true
       }).then((data) => {
         setRecent(data.rows.map(({ doc }) => doc).reverse());
       });
     };
     getRecent();
-    db.changes({
-      live: true,
-      since: "now",
-    }).on("change", function (change) {
-      getRecent();
-    });
+    // db.changes({
+    //   live: true,
+    //   since: "now",
+    // }).on("change", function (change) {
+    //   getRecent();
+    // });
   }, [setRecent]);
   // db.allDocs({ include_docs: true }).then(function (doc) {
   //   console.log(">>>", doc);
