@@ -8,7 +8,7 @@ export const GrillStatusContextProvider = ({ children }) => {
   useEffect(() => {
     console.log('Connecting to database', process.env.REACT_APP_DB_NAME)
     const db = new PouchDB(
-      `http://localhost:5984/${process.env.REACT_APP_DB_NAME}`
+      `http://${window.location.hostname}:5984/${process.env.REACT_APP_DB_NAME}`
     );
     const getRecent = () => {
       db.allDocs({
