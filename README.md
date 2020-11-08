@@ -18,3 +18,22 @@ On line 43 you can set the chart yDomain, which is currently 220 `const yDomain 
 ## Adjusting data
 
 See src/contexts/GrillStatusContext.jsx. The most common adjustments will be limit and skip and whether to record live changes. This can also be set in the `.env` file.
+
+## Running on Raspberry Pi
+
+There is a simple script to facilitate dev / testing on raspberry pi. On each startup / reboot the following steps are prefermed. This makes it easy to run the latest by just power cycling the Pi.
+
+1. pull latest source code from current branch (stay on master)
+2. run `yarn` to get latest dependencies 
+3. run `yarn start` to start in dev mode. (Eventually there will a way to run a built or dist version.)
+
+### How to setup
+
+- `sudo vi /etc/systemd/system/frontend.service` 
+- paste in contents from `frontend.service`
+- `sudo systemctl daemon-reload`
+- test starting with `sudo systemctl start frontend.service`
+- test stopping with `sudo systemctl stop frontend.service`
+- enable at startup `sudo systemctl enable frontend.service`
+- test it out with a reboot `sudo reboot`
+

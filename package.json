@@ -14,9 +14,12 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "react-vis": "^1.11.7",
-    "rethinkdb": "^2.4.2"
+    "rethinkdb": "^2.4.2",
+    "styled-components": "^5.1.1"
   },
   "scripts": {
+    "update": "git pull",
+    "pi": "yarn update && yarn && yarn start",
     "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
