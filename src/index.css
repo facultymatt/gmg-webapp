@@ -12,6 +12,14 @@ code {
     monospace;
 }
 
+#root {
+  display: flex;
+}
+
+#root > div {
+  display: flex;
+}
+
 html,
 body,
 #root {

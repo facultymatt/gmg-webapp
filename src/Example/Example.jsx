@@ -18,16 +18,7 @@ import {
   axisLeftTickLabelProps,
 } from "../constants/chart-axis";
 
-function Example({
-  width,
-  height,
-  margin = {
-    top: 20,
-    left: 50,
-    bottom: 20,
-    right: 20,
-  },
-}) {
+function Example({ width, height }) {
   const { recent } = useContext(GrillStatusContext);
   // @todo move into context
   const recentGrouppedByMetric = {};
@@ -53,11 +44,16 @@ function Example({
   });
   const ordinalColorScale = scaleOrdinal(ordinalColorScaleValues);
 
-  const topChartHeight = height - margin.top - margin.bottom;
+  const margin = {
+    top: 20,
+    left: 50,
+    bottom: 40,
+    right: 20,
+  };
 
-  // bounds
-  const xMax = Math.max(width - margin.left - margin.right, 0);
-  const yMax = Math.max(topChartHeight, 0);
+  // Then we'll create some bounds
+  const xMax = width - margin.left - margin.right;
+  const yMax = height - margin.top - margin.bottom;
 
   // scales
   const dateScale = useMemo(
@@ -72,8 +68,7 @@ function Example({
     () =>
       scaleLinear({
         range: [yMax, 0],
-        domain: [0, 600],
-        nice: true,
+        domain: [130, 180]
       }),
     [yMax]
   );
@@ -83,8 +78,8 @@ function Example({
   }
 
   return (
-    <div>
-      <LegendOrdinal
+    <>
+      {/* <LegendOrdinal
         scale={ordinalColorScale}
         labelFormat={(label) => `${label.toUpperCase()}`}
       >
@@ -112,33 +107,31 @@ function Example({
             ))}
           </div>
         )}
-      </LegendOrdinal>
+      </LegendOrdinal> */}
       <svg width={width} height={height}>
-        <Group>
+        <Group left={margin.left} top={margin.top}>
           {metrics.map(({ metric }) => (
             <LinePath
-              left={margin.left}
               key={metric}
               data={recentGrouppedByMetric[metric]}
               x={(d) => dateScale(getDate(d)) || 0}
               y={(d) => tempScale(getY(d)) || 0}
-              stroke="black"
+              stroke={colors[metric]}
             />
           ))}
         </Group>
         <AxisBottom
-          top={yMax}
+          top={yMax + margin.top}
+          left={margin.left}
           scale={dateScale}
-          numTicks={width > 520 ? 10 : 5}
-          tickLabelProps={() => axisBottomTickLabelProps}
         />
         <AxisLeft
-          left={margin.left}
+          top={margin.top}
+          left={width - xMax - margin.right}
           scale={tempScale}
-          tickLabelProps={() => axisLeftTickLabelProps}
         />
       </svg>
-    </div>
+    </>
   );
 }
 
