@@ -4,8 +4,9 @@ import { Group } from "@visx/group";
 import { extent } from "d3-array";
 import { legendGlyphSize } from "./../constants/chart-legend";
 import { metrics } from "./../constants/metrics";
-import { map, get, find } from "lodash";
+import { map, get, find, mapValues } from "lodash";
 import { MarkerX } from "@visx/marker";
+import simplify from "simplify-js";
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
@@ -26,6 +27,12 @@ function Example({ width = 1000, height = 300 }) {
       y: getY ? getY(pt) : get(pt, metric),
     }));
   });
+  mapValues(recentGrouppedByMetric, (values, key) => {
+    const simplified = simplify(values, 0.8, true);
+    console.log(`${key} from ${values.length} to ${simplified.length}`);
+    return simplified;
+  });
+
   // @todo support all, for now just use one metric
   const dataForSingleMetric = recentGrouppedByMetric["currentGrillTemp"];
 
@@ -92,7 +99,6 @@ function Example({ width = 1000, height = 300 }) {
             }}
           >
             {labels.map((label, i) => {
-              console.log(label);
               const { strokeWidth } = metricStyle[label.datum];
               return (
                 <LegendItem
