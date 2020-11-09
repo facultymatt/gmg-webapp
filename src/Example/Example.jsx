@@ -4,9 +4,8 @@ import { Group } from "@visx/group";
 import { extent } from "d3-array";
 import { legendGlyphSize } from "./../constants/chart-legend";
 import { metrics } from "./../constants/metrics";
-import { map, get, find, mapValues } from "lodash";
+import { find, get } from "lodash";
 import { MarkerX } from "@visx/marker";
-import simplify from "simplify-js";
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
@@ -18,23 +17,10 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
 function Example({ width = 1000, height = 300 }) {
-  const { recent } = useContext(GrillStatusContext);
-  // @todo move into context
-  const recentGrouppedByMetric = {};
-  metrics.forEach(({ metric, getY }) => {
-    recentGrouppedByMetric[metric] = map(recent, (pt) => ({
-      x: get(pt, "timestamp"),
-      y: getY ? getY(pt) : get(pt, metric),
-    }));
-  });
-  mapValues(recentGrouppedByMetric, (values, key) => {
-    const simplified = simplify(values, 0.8, true);
-    console.log(`${key} from ${values.length} to ${simplified.length}`);
-    return simplified;
-  });
+  const { recentGrouppedByMetric } = useContext(GrillStatusContext);
 
   // @todo support all, for now just use one metric
-  const dataForSingleMetric = recentGrouppedByMetric["currentGrillTemp"];
+  const dataForSingleMetric = get(recentGrouppedByMetric, "currentGrillTemp", []);
 
   /**
    * Create legend with key and color value
@@ -79,7 +65,7 @@ function Example({ width = 1000, height = 300 }) {
   );
 
   if (dataForSingleMetric.length === 0) {
-    return <h1>No data</h1>;
+    return <p className="loading">Loading...</p>;
   }
 
   return (
