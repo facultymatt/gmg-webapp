@@ -12,7 +12,6 @@ function App() {
         <ParentSize>
           {({ width, height }) => <Example width={width} height={height} />}
         </ParentSize>
-        ,
       </GrillStatusContextProvider>
     ),
     []

@@ -24,8 +24,8 @@ const axisLeftTickLabelProps = {
 };
 
 // accessors
-const getDate = (d) => new Date(d.date);
-const getStockValue = (d) => d.close;
+const getDate = (d) => new Date(d.timestamp);
+const getStockValue = (d) => d.currentProbe1Temp;
 
 export default function AreaChart({
   data,
