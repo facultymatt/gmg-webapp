@@ -6,7 +6,6 @@ export const GrillStatusContext = createContext({});
 export const GrillStatusContextProvider = ({ children }) => {
   const [recent, setRecent] = useState([]);
   useEffect(() => {
-    console.log('Connecting to database', process.env.REACT_APP_DB_NAME)
     const db = new PouchDB(
       `http://${window.location.hostname}:5984/${process.env.REACT_APP_DB_NAME}`
     );
@@ -14,7 +13,7 @@ export const GrillStatusContextProvider = ({ children }) => {
       db.allDocs({
         include_docs: true,
         skip: 0,
-        limit: 500,
+        limit: 1200,
         descending: true,
       }).then((data) => {
         setRecent(data.rows.map(({ doc }) => doc).reverse());

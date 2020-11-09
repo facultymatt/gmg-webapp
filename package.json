@@ -15,6 +15,7 @@
     "@visx/grid": "^1.1.0",
     "@visx/group": "^1.0.0",
     "@visx/legend": "^1.1.0",
+    "@visx/marker": "^1.1.0",
     "@visx/mock-data": "^1.0.0",
     "@visx/pattern": "^1.1.0",
     "@visx/react-spring": "^1.1.0",

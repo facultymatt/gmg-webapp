@@ -5,21 +5,18 @@ import { extent } from "d3-array";
 import { legendGlyphSize } from "./../constants/chart-legend";
 import { metrics } from "./../constants/metrics";
 import { map, get, find } from "lodash";
+import { MarkerX } from "@visx/marker";
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
 import GrillStatusContext from "../contexts/GrillStatusContext";
-import { colors } from "../constants/chart-colors";
+import { colors, metricStyle } from "../constants/chart-colors";
 import { getDate, getY } from "../constants/chart-data-getters";
 import { LinePath } from "@visx/shape";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import {
-  axisBottomTickLabelProps,
-  axisLeftTickLabelProps,
-} from "../constants/chart-axis";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
-function Example({ width = 1000, height = 400 }) {
+function Example({ width = 1000, height = 300 }) {
   const { recent } = useContext(GrillStatusContext);
   // @todo move into context
   const recentGrouppedByMetric = {};
@@ -69,7 +66,7 @@ function Example({ width = 1000, height = 400 }) {
     () =>
       scaleLinear({
         range: [yMax, 0],
-        domain: [130, 180],
+        domain: [145, 165],
       }),
     [yMax]
   );
@@ -87,13 +84,20 @@ function Example({ width = 1000, height = 400 }) {
         }}
       >
         {(labels) => (
-          <div style={{ display: "flex", flexDirection: "column", whiteSpace: "nowrap" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              whiteSpace: "nowrap",
+            }}
+          >
             {labels.map((label, i) => (
               <LegendItem
                 key={`legend-quantile-${i}`}
                 margin="0 5px"
                 onClick={() => {
-                  alert(`clicked: ${JSON.stringify(label)}`);
+                  // @TODO make set visibility
+                  // alert(`clicked: ${JSON.stringify(label)}`);
                 }}
               >
                 <svg width={legendGlyphSize} height={legendGlyphSize}>
@@ -112,6 +116,13 @@ function Example({ width = 1000, height = 400 }) {
         )}
       </LegendOrdinal>
       <svg width={width} height={height}>
+        <MarkerX
+          id="marker-x"
+          stroke="#333"
+          size={10}
+          strokeWidth={2}
+          markerUnits="userSpaceOnUse"
+        />
         <Group left={margin.left} top={margin.top}>
           {metrics.map(({ metric }) => (
             <LinePath
@@ -119,7 +130,8 @@ function Example({ width = 1000, height = 400 }) {
               data={recentGrouppedByMetric[metric]}
               x={(d) => dateScale(getDate(d)) || 0}
               y={(d) => tempScale(getY(d)) || 0}
-              stroke={colors[metric]}
+              {...metricStyle[metric]}
+              markerStart="url(#marker-x)"
             />
           ))}
         </Group>
