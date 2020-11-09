@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from "react";
-import { scaleTime, scaleLinear, scaleOrdinal } from "@visx/scale";
+import { scaleTime, scaleLinear } from "@visx/scale";
 import appleStock, { AppleStock } from "@visx/mock-data/lib/mocks/appleStock";
 import { Brush } from "@visx/brush";
 import { Bounds } from "@visx/brush/lib/types";
@@ -7,15 +7,12 @@ import { PatternLines } from "@visx/pattern";
 import { LinearGradient } from "@visx/gradient";
 import { max, extent } from "d3-array";
 
-import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
-
 import AreaChart from "./AreaChart";
 import GrillStatusContext from "../contexts/GrillStatusContext";
 
 export const accentColor = "#f6acc8";
 export const background = "#584153";
 export const background2 = "#af8baf";
-const legendGlyphSize = 15;
 
 function Example({
   compact = false,
@@ -40,11 +37,6 @@ function Example({
     fill: `url(#${PATTERN_ID})`,
     stroke: "white",
   };
-
-  const ordinalColorScale = scaleOrdinal({
-    domain: ["a", "b", "c", "d"],
-    range: ["#66d981", "#71f5ef", "#4899f1", "#7d81f6"],
-  });
 
   // accessors
   const getDate = (d) => {
@@ -136,37 +128,7 @@ function Example({
 
   return (
     <div>
-      <LegendOrdinal
-          scale={ordinalColorScale}
-          labelFormat={(label) => `${label.toUpperCase()}`}
-        >
-          {(labels) => (
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              {labels.map((label, i) => (
-                <LegendItem
-                  key={`legend-quantile-${i}`}
-                  margin="0 5px"
-                  onClick={() => {
-                    alert(`clicked: ${JSON.stringify(label)}`);
-                  }}
-                >
-                  <svg width={legendGlyphSize} height={legendGlyphSize}>
-                    <rect
-                      fill={label.value}
-                      width={legendGlyphSize}
-                      height={legendGlyphSize}
-                    />
-                  </svg>
-                  <LegendLabel align="left" margin="0 0 0 4px">
-                    {label.text}
-                  </LegendLabel>
-                </LegendItem>
-              ))}
-            </div>
-          )}
-        </LegendOrdinal>
       <svg width={width} height={height}>
-        
         <LinearGradient
           id={GRADIENT_ID}
           from={background}

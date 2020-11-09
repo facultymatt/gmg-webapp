@@ -2028,6 +2028,18 @@
     classnames "^2.2.5"
     prop-types "^15.6.2"
 
+"@visx/legend@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@visx/legend/-/legend-1.1.0.tgz#52c1616c527bb6f54c7c1f01a12cd1dca567909e"
+  integrity sha512-mPue8rqZqGN0J8IgQWu5mAlrpKaeffpTtRXwobcaHK3X2r/9FvMtAMryAdNooFNQCJYWCczzC0tGog7AzN2NlQ==
+  dependencies:
+    "@types/classnames" "^2.2.9"
+    "@types/react" "*"
+    "@visx/group" "1.0.0"
+    "@visx/scale" "1.1.0"
+    classnames "^2.2.5"
+    prop-types "^15.5.10"
+
 "@visx/mock-data@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@visx/mock-data/-/mock-data-1.0.0.tgz#9b3f28c8fba830b38c06cc05a5280efd3bf74449"
