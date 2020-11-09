@@ -3,15 +3,14 @@ import { Group } from "@visx/group";
 import { LinePath } from "@visx/shape";
 import { AxisLeft, AxisBottom } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
-import { colors } from "../constants/chart-colors";
 import {
   axisBottomTickLabelProps,
   axisLeftTickLabelProps,
 } from "../constants/chart-axis";
-import { getDate, getStockValue } from "../constants/chart-data-getters";
+import { getDate, getY } from "../constants/chart-data-getters";
 import { axisColor } from "../constants/chart-colors";
 
-export default function AreaChart({
+export default function LineChart({
   data,
   width,
   yMax,
@@ -23,13 +22,14 @@ export default function AreaChart({
   left,
   children,
 }) {
+  console.log('LineChart data', data);
   if (width < 10) return null;
   return (
     <Group left={left || margin.left} top={top || margin.top}>
       <LinePath
         data={data}
         x={(d) => xScale(getDate(d)) || 0}
-        y={(d) => yScale(getStockValue(d)) || 0}
+        y={(d) => yScale(getY(d)) || 0}
         strokeWidth={1}
         stroke={lineColor}
         curve={curveMonotoneX}
