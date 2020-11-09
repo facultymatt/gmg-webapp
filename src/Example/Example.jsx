@@ -4,7 +4,7 @@ import { Group } from "@visx/group";
 import { extent } from "d3-array";
 import { legendGlyphSize } from "./../constants/chart-legend";
 import { metrics } from "./../constants/metrics";
-import { map, get } from "lodash";
+import { map, get, find } from "lodash";
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
@@ -68,7 +68,7 @@ function Example({ width, height }) {
     () =>
       scaleLinear({
         range: [yMax, 0],
-        domain: [130, 180]
+        domain: [130, 180],
       }),
     [yMax]
   );
@@ -79,12 +79,14 @@ function Example({ width, height }) {
 
   return (
     <>
-      {/* <LegendOrdinal
+      <LegendOrdinal
         scale={ordinalColorScale}
-        labelFormat={(label) => `${label.toUpperCase()}`}
+        labelFormat={(label) => {
+          return find(metrics, ({ metric }) => metric === label).display;
+        }}
       >
         {(labels) => (
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ display: "flex", flexDirection: "column", whiteSpace: "nowrap" }}>
             {labels.map((label, i) => (
               <LegendItem
                 key={`legend-quantile-${i}`}
@@ -107,7 +109,7 @@ function Example({ width, height }) {
             ))}
           </div>
         )}
-      </LegendOrdinal> */}
+      </LegendOrdinal>
       <svg width={width} height={height}>
         <Group left={margin.left} top={margin.top}>
           {metrics.map(({ metric }) => (
