@@ -18,7 +18,8 @@ import {
   axisLeftTickLabelProps,
 } from "../constants/chart-axis";
 
-function Example({ width, height }) {
+// @todo break into legend, chart components and use ParentSize to make chart responsive
+function Example({ width = 1000, height = 400 }) {
   const { recent } = useContext(GrillStatusContext);
   // @todo move into context
   const recentGrouppedByMetric = {};
