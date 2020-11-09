@@ -18,7 +18,7 @@ export const GrillStatusContextProvider = ({ children }) => {
       db.allDocs({
         include_docs: true,
         skip: 0,
-        limit: 3000,
+        limit: 20,
         descending: true,
       }).then((data) => {
         setRecent(data.rows.map(({ doc }) => doc).reverse());

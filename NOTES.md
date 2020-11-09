@@ -19,3 +19,7 @@
 
 - https://textbelt.com/
 - others? 
+
+# How to get all databases
+
+- http://127.0.0.1:5984/_all_dbs exists

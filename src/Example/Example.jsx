@@ -59,7 +59,7 @@ function Example({ width = 1000, height = 300 }) {
     () =>
       scaleLinear({
         range: [yMax, 0],
-        domain: [145, 165],
+        domain: [30, 50],
       }),
     [yMax]
   );
