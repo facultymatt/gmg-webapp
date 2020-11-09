@@ -6,13 +6,14 @@ import { Bounds } from "@visx/brush/lib/types";
 import { PatternLines } from "@visx/pattern";
 import { LinearGradient } from "@visx/gradient";
 import { max, extent } from "d3-array";
-import { legendGlyphSize } from './../constants/chart-legend'
+import { legendGlyphSize } from './../constants/chart-legend';
+import { metrics } from './../constants/metrics';
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
 import AreaChart from "./AreaChart";
 import GrillStatusContext from "../contexts/GrillStatusContext";
-import { accentColor } from "../constants/chart-colors";
+import { accentColor, colors } from "../constants/chart-colors";
 
 function Example({
   compact = false,
@@ -38,10 +39,19 @@ function Example({
     stroke: "black",
   };
 
-  const ordinalColorScale = scaleOrdinal({
-    domain: ["a", "b", "c", "d"],
-    range: ["#66d981", "#71f5ef", "#4899f1", "#7d81f6"],
+  /**
+   * Create legend with key and color value
+   */
+  const ordinalColorScaleValues = {
+    domain: [],
+    range: []
+  };
+  metrics.forEach(({ metric }) => {
+    console.log(metric);
+    ordinalColorScaleValues.domain.push(metric);
+    ordinalColorScaleValues.range.push(colors[metric]);
   });
+  const ordinalColorScale = scaleOrdinal(ordinalColorScaleValues);
 
   // accessors
   const getDate = (d) => {
@@ -164,17 +174,15 @@ function Example({
         </LegendOrdinal>
       <svg width={width} height={height}>
         <AreaChart
-          hideBottomAxis={compact}
           data={filteredStock}
           width={width}
           margin={{ ...margin, bottom: topChartBottomMargin }}
           yMax={yMax}
           xScale={dateScale}
           yScale={stockScale}
+          lineColor={colors['currentProbe1Temp']}
         />
         <AreaChart
-          hideBottomAxis
-          hideLeftAxis
           data={stock}
           width={width}
           yMax={yBrushMax}
@@ -182,6 +190,7 @@ function Example({
           yScale={brushStockScale}
           margin={brushMargin}
           top={topChartHeight + topChartBottomMargin + margin.top}
+          lineColor={colors['currentProbe1Temp']}
         >
           <PatternLines
             id={PATTERN_ID}
