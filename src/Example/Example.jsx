@@ -91,27 +91,33 @@ function Example({ width = 1000, height = 300 }) {
               whiteSpace: "nowrap",
             }}
           >
-            {labels.map((label, i) => (
-              <LegendItem
-                key={`legend-quantile-${i}`}
-                margin="0 5px"
-                onClick={() => {
-                  // @TODO make set visibility
-                  // alert(`clicked: ${JSON.stringify(label)}`);
-                }}
-              >
-                <svg width={legendGlyphSize} height={legendGlyphSize}>
-                  <rect
-                    fill={label.value}
-                    width={legendGlyphSize}
-                    height={legendGlyphSize}
-                  />
-                </svg>
-                <LegendLabel align="left" margin="0 0 0 4px">
-                  {label.text}
-                </LegendLabel>
-              </LegendItem>
-            ))}
+            {labels.map((label, i) => {
+              console.log(label);
+              const { strokeWidth } = metricStyle[label.datum];
+              return (
+                <LegendItem
+                  key={`legend-quantile-${i}`}
+                  margin="0 5px"
+                  onClick={() => {
+                    // @TODO make set visibility
+                    // alert(`clicked: ${JSON.stringify(label)}`);
+                  }}
+                >
+                  <svg width={legendGlyphSize} height={strokeWidth}>
+                    <line
+                      {...metricStyle[label.datum]}
+                      x1={0}
+                      y1={strokeWidth / 2}
+                      x2={legendGlyphSize}
+                      y2={strokeWidth / 2}
+                    />
+                  </svg>
+                  <LegendLabel align="left" margin="0 0 0 4px">
+                    {label.text}
+                  </LegendLabel>
+                </LegendItem>
+              );
+            })}
           </div>
         )}
       </LegendOrdinal>

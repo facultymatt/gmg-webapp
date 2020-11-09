@@ -21,26 +21,31 @@ export const dashArray = {
 
 export const metricStyle = {
   currentGrillTemp: {
-    stroke: "red"
+    stroke: "red",
+    strokeWidth: 2
   },
   desiredGrillTemp: {
     stroke: "red",
     strokeDasharray: "2,2",
-    strokeWidth: 1
+    strokeWidth: 2
   },
   currentProbe1Temp: {
-    stroke: "blue"
+    stroke: "blue",
+    strokeWidth: 2
   },
   desiredProbe1Temp: {
     stroke: "blue",
-    strokeDasharray: "2,2"
+    strokeDasharray: "2,2",
+    strokeWidth: 2
   },
   currentProbe2Temp: {
-    stroke: "green"
+    stroke: "green",
+    strokeWidth: 2
   },
   desiredProbe2Temp: {
     stroke: "green",
-    strokeDasharray: "2,2"
+    strokeDasharray: "2,2",
+    strokeWidth: 2
   }
 }
 
