@@ -7,7 +7,7 @@ import { curveMonotoneX } from '@visx/curve';
 import { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
 
 // Initialize some variables
-const axisColor = '#fff';
+const axisColor = 'black';
 const axisBottomTickLabelProps = {
   textAnchor: 'middle',
   fontFamily: 'Arial',

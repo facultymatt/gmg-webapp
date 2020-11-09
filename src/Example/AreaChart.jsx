@@ -1,35 +1,15 @@
 import React from 'react';
 import { Group } from '@visx/group';
-import { AreaClosed } from '@visx/shape';
-import { AxisLeft, AxisBottom, AxisScale } from '@visx/axis';
-import { LinearGradient } from '@visx/gradient';
+import { LinePath } from '@visx/shape';
+import { AxisLeft, AxisBottom } from '@visx/axis';
 import { curveMonotoneX } from '@visx/curve';
-import { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
-
-// Initialize some variables
-const axisColor = '#fff';
-const axisBottomTickLabelProps = {
-  textAnchor: 'middle',
-  fontFamily: 'Arial',
-  fontSize: 10,
-  fill: axisColor,
-};
-const axisLeftTickLabelProps = {
-  dx: '-0.25em',
-  dy: '0.25em',
-  fontFamily: 'Arial',
-  fontSize: 10,
-  textAnchor: 'end',
-  fill: axisColor,
-};
-
-// accessors
-const getDate = (d) => new Date(d.timestamp);
-const getStockValue = (d) => d.currentProbe1Temp;
+import { colors } from '../constants/chart-colors';
+import { axisBottomTickLabelProps, axisLeftTickLabelProps } from '../constants/chart-axis';
+import { getDate, getStockValue } from '../constants/chart-data-getters';
+import { axisColor } from '../constants/chart-colors';
 
 export default function AreaChart({
   data,
-  gradientColor,
   width,
   yMax,
   margin,
@@ -44,21 +24,13 @@ export default function AreaChart({
   if (width < 10) return null;
   return (
     <Group left={left || margin.left} top={top || margin.top}>
-      <LinearGradient
-        id="gradient"
-        from={gradientColor}
-        fromOpacity={1}
-        to={gradientColor}
-        toOpacity={0.2}
-      />
-      <AreaClosed
+      <LinePath
         data={data}
         x={d => xScale(getDate(d)) || 0}
         y={d => yScale(getStockValue(d)) || 0}
         yScale={yScale}
         strokeWidth={1}
-        stroke="url(#gradient)"
-        fill="url(#gradient)"
+        stroke={colors['currentProbe1Temp']}
         curve={curveMonotoneX}
       />
       {!hideBottomAxis && (

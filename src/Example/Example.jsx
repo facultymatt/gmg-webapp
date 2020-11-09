@@ -6,16 +6,13 @@ import { Bounds } from "@visx/brush/lib/types";
 import { PatternLines } from "@visx/pattern";
 import { LinearGradient } from "@visx/gradient";
 import { max, extent } from "d3-array";
+import { legendGlyphSize } from './../constants/chart-legend'
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
 import AreaChart from "./AreaChart";
 import GrillStatusContext from "../contexts/GrillStatusContext";
-
-export const accentColor = "#f6acc8";
-export const background = "#584153";
-export const background2 = "#af8baf";
-const legendGlyphSize = 15;
+import { accentColor } from "../constants/chart-colors";
 
 function Example({
   compact = false,
@@ -38,7 +35,7 @@ function Example({
   const GRADIENT_ID = "brush_gradient";
   const selectedBrushStyle = {
     fill: `url(#${PATTERN_ID})`,
-    stroke: "white",
+    stroke: "black",
   };
 
   const ordinalColorScale = scaleOrdinal({
@@ -166,21 +163,6 @@ function Example({
           )}
         </LegendOrdinal>
       <svg width={width} height={height}>
-        
-        <LinearGradient
-          id={GRADIENT_ID}
-          from={background}
-          to={background2}
-          rotate={45}
-        />
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fill={`url(#${GRADIENT_ID})`}
-          rx={14}
-        />
         <AreaChart
           hideBottomAxis={compact}
           data={filteredStock}
@@ -189,7 +171,6 @@ function Example({
           yMax={yMax}
           xScale={dateScale}
           yScale={stockScale}
-          gradientColor={background2}
         />
         <AreaChart
           hideBottomAxis
@@ -201,7 +182,6 @@ function Example({
           yScale={brushStockScale}
           margin={brushMargin}
           top={topChartHeight + topChartBottomMargin + margin.top}
-          gradientColor={background2}
         >
           <PatternLines
             id={PATTERN_ID}
