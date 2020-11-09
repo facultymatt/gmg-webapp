@@ -13,8 +13,8 @@ export const GrillStatusContextProvider = ({ children }) => {
     const getRecent = () => {
       db.allDocs({
         include_docs: true,
-        skip: process.env.REACT_APP_SKIP,
-        limit: process.env.REACT_APP_LIMIT,
+        skip: 0,
+        limit: 100,
         descending: true,
       }).then((data) => {
         setRecent(data.rows.map(({ doc }) => doc).reverse());
