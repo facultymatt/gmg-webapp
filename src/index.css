@@ -13,11 +13,11 @@ code {
 }
 
 #root {
-  display: flex;
+  /* display: flex; */
 }
 
-#root > div {
-  display: flex;
+#root > * {
+  display: block;
 }
 
 html,

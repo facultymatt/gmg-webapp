@@ -9,14 +9,15 @@ import { getDate, getY } from "../constants/chart-data-getters";
 import { LinePath } from "@visx/shape";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
-function Trendline({ width = 100, height = 100 }) {
-  const { trend } = useContext(GrillStatusContext);
+function Trendline({ width = 50, height = 50, metric }) {
+  const { trends } = useContext(GrillStatusContext);
+  const trend = trends[metric] || [];
 
   const margin = {
-    top: 10,
-    left: 10,
-    bottom: 10,
-    right: 10,
+    top: 5,
+    left: 5,
+    bottom: 5,
+    right: 5,
   };
 
   // Then we'll create some bounds

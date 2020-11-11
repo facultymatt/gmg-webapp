@@ -12,7 +12,7 @@ export const GrillStatusContextProvider = ({ children }) => {
   const [recent, setRecent] = useState([]);
   const [recentGrouppedByMetric, setRecentGrouppedByMetric] = useState({});
   const [current, setCurrent] = useState({});
-  const [trend, setTrend] = useState([]);
+  const [trends, setTrends] = useState([]);
   useEffect(() => {
     const remoteDb = new PouchDB(
       `http://${window.location.hostname}:5984/live_stream`
@@ -22,10 +22,10 @@ export const GrillStatusContextProvider = ({ children }) => {
     const getRecent = () => {
       remoteDb.allDocs({
         include_docs: true,
-        // skip: 0,
-        // limit: 10000,
         skip: 0,
-        limit: 100, // 1/2 hour
+        limit: 1800,
+        // skip: 0,
+        // limit: 100, // 1/2 hour
         descending: true,
       }).then((data) => {
         setRecent(data.rows.map(({ doc }) => doc).reverse());
@@ -57,19 +57,22 @@ export const GrillStatusContextProvider = ({ children }) => {
     //   values.push({ x: latestTime ? latestTime.x : 0, y: latestTime ? latestTime.y + 1 : 0 });
     //   return values;
     // });
-    mapValues(mapped, (values, key) => {
+    const simplified = mapValues(mapped, (values, key) => {
       const simplified = simplify(values, 0.8, true);
       console.debug(`Simplified ${key} from ${values.length} to ${simplified.length}`);
       return simplified;
     });
-    setRecentGrouppedByMetric(mapped);
+    setRecentGrouppedByMetric(simplified);
   }, [recent]);
 
   useEffect(() => {
-    const pts = recentGrouppedByMetric['currentProbe2Temp'];
-    if (pts && pts.length > 0) {
-      setTrend(lineFit(pts));
-    }
+    const trends = mapValues(recentGrouppedByMetric, (values, key) => {
+      if (values && values.length >= 2) {
+        return lineFit(values);
+      }
+      return [];
+    });
+    setTrends(trends);
   }, [recentGrouppedByMetric]);
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export const GrillStatusContextProvider = ({ children }) => {
   return (
     <GrillStatusContext.Provider
       value={{
-        trend,
+        trends,
         recent,
         recentGrouppedByMetric,
         current

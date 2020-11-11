@@ -14,10 +14,11 @@ import { colors, metricStyle } from "../constants/chart-colors";
 import { getDate, getY } from "../constants/chart-data-getters";
 import { LinePath } from "@visx/shape";
 import { AxisBottom, AxisLeft } from "@visx/axis";
+import Trendline from "./Trendline";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
 function Example({ width = 1000, height = 300 }) {
-  const { recentGrouppedByMetric, trend } = useContext(GrillStatusContext);
+  const { recentGrouppedByMetric, trends } = useContext(GrillStatusContext);
 
   // @todo support all, for now just use one metric
   const dataForSingleMetric = get(
@@ -112,6 +113,7 @@ function Example({ width = 1000, height = 300 }) {
                   </svg>
                   <LegendLabel align="left" margin="0 0 0 4px">
                     {label.text}
+                    <Trendline metric={label.datum} />
                   </LegendLabel>
                 </LegendItem>
               );
@@ -136,22 +138,24 @@ function Example({ width = 1000, height = 300 }) {
         />
         <Group left={margin.left} top={margin.top}>
           {metrics.map(({ metric }) => (
-            <LinePath
-              key={metric}
-              data={recentGrouppedByMetric[metric]}
-              x={(d) => dateScale(getDate(d)) || 0}
-              y={(d) => tempScale(getY(d)) || 0}
-              {...metricStyle[metric]}
-              markerStart="url(#marker-x)"
-            />
+            <Group key={metric}>
+              <LinePath
+                data={recentGrouppedByMetric[metric]}
+                x={(d) => dateScale(getDate(d)) || 0}
+                y={(d) => tempScale(getY(d)) || 0}
+                {...metricStyle[metric]}
+                markerStart="url(#marker-x)"
+              />
+              {/* <LinePath
+                data={trends[metric]}
+                x={(d) => dateScale(getDate(d)) || 0}
+                y={(d) => tempScale(getY(d)) || 0}
+                {...metricStyle[metric]}
+                strokeDasharray="1,10"
+                markerEnd="url(#marker-arrow)"
+              /> */}
+            </Group>
           ))}
-          <LinePath
-            data={trend}
-            x={(d) => dateScale(getDate(d)) || 0}
-            y={(d) => tempScale(getY(d)) || 0}
-            stroke="black"
-            markerEnd="url(#marker-arrow)"
-          />
         </Group>
         <AxisBottom
           top={yPositionMax + margin.top}
