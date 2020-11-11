@@ -5,7 +5,7 @@ import { extent } from "d3-array";
 import { legendGlyphSize } from "./../constants/chart-legend";
 import { metrics } from "./../constants/metrics";
 import { find, get } from "lodash";
-import { MarkerX } from "@visx/marker";
+import { MarkerX, MarkerArrow } from "@visx/marker";
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 
@@ -17,10 +17,14 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
 function Example({ width = 1000, height = 300 }) {
-  const { recentGrouppedByMetric } = useContext(GrillStatusContext);
+  const { recentGrouppedByMetric, trend } = useContext(GrillStatusContext);
 
   // @todo support all, for now just use one metric
-  const dataForSingleMetric = get(recentGrouppedByMetric, "currentGrillTemp", []);
+  const dataForSingleMetric = get(
+    recentGrouppedByMetric,
+    "currentProbe2Temp",
+    []
+  );
 
   /**
    * Create legend with key and color value
@@ -43,25 +47,27 @@ function Example({ width = 1000, height = 300 }) {
   };
 
   // Then we'll create some bounds
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
+  const xPositionMax = width - margin.left - margin.right;
+  const yPositionMax = height - margin.top - margin.bottom;
 
   // scales
   const dateScale = useMemo(
     () =>
       scaleTime({
-        range: [0, xMax],
+        range: [0, xPositionMax],
+        // @todo move extent into context, use first and last points
         domain: extent(dataForSingleMetric, getDate),
       }),
-    [xMax, dataForSingleMetric]
+    [xPositionMax, dataForSingleMetric]
   );
+
   const tempScale = useMemo(
     () =>
       scaleLinear({
-        range: [yMax, 0],
-        domain: [30, 50],
+        range: [yPositionMax, 0],
+        domain: [0, 250],
       }),
-    [yMax]
+    [yPositionMax]
   );
 
   if (dataForSingleMetric.length === 0) {
@@ -121,6 +127,13 @@ function Example({ width = 1000, height = 300 }) {
           strokeWidth={2}
           markerUnits="userSpaceOnUse"
         />
+        <MarkerArrow
+          id="marker-arrow"
+          stroke="red"
+          size={10}
+          strokeWidth={2}
+          markerUnits="userSpaceOnUse"
+        />
         <Group left={margin.left} top={margin.top}>
           {metrics.map(({ metric }) => (
             <LinePath
@@ -132,15 +145,22 @@ function Example({ width = 1000, height = 300 }) {
               markerStart="url(#marker-x)"
             />
           ))}
+          <LinePath
+            data={trend}
+            x={(d) => dateScale(getDate(d)) || 0}
+            y={(d) => tempScale(getY(d)) || 0}
+            stroke="black"
+            markerEnd="url(#marker-arrow)"
+          />
         </Group>
         <AxisBottom
-          top={yMax + margin.top}
+          top={yPositionMax + margin.top}
           left={margin.left}
           scale={dateScale}
         />
         <AxisLeft
           top={margin.top}
-          left={width - xMax - margin.right}
+          left={width - xPositionMax - margin.right}
           scale={tempScale}
         />
       </svg>
