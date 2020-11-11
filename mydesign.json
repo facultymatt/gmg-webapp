@@ -1,0 +1,11 @@
+{
+  "_id" : "_design/sensor_values",
+  "views" : {
+    "currentGrillTemp" : {
+      "map" : "function(doc){ emit(null, doc.currentGrillTemp)}"
+    },
+    "desiredGrillTemp" : {
+      "map" : "function(doc){ emit(null, doc.desiredGrillTemp)}"
+    }
+  }
+}

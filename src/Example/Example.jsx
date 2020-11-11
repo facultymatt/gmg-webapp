@@ -15,6 +15,7 @@ import { getDate, getY } from "../constants/chart-data-getters";
 import { LinePath } from "@visx/shape";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import Trendline from "./Trendline";
+import SparkLine from "./SparkLine";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
 function Example({ width = 1000, height = 300 }) {
@@ -114,6 +115,7 @@ function Example({ width = 1000, height = 300 }) {
                   <LegendLabel align="left" margin="0 0 0 4px">
                     {label.text}
                     <Trendline metric={label.datum} />
+                    <SparkLine metric={label.datum} />
                   </LegendLabel>
                 </LegendItem>
               );
@@ -146,14 +148,14 @@ function Example({ width = 1000, height = 300 }) {
                 {...metricStyle[metric]}
                 markerStart="url(#marker-x)"
               />
-              {/* <LinePath
+              <LinePath
                 data={trends[metric]}
                 x={(d) => dateScale(getDate(d)) || 0}
                 y={(d) => tempScale(getY(d)) || 0}
                 {...metricStyle[metric]}
                 strokeDasharray="1,10"
                 markerEnd="url(#marker-arrow)"
-              /> */}
+              />
             </Group>
           ))}
         </Group>

@@ -20,27 +20,52 @@ export const GrillStatusContextProvider = ({ children }) => {
     // const localDb = new PouchDB(`gmg-local-${process.env.REACT_APP_DB_NAME}`);
     // localDb.sync(remoteDb, { live: true, retry: true });
     const getRecent = () => {
-      remoteDb.allDocs({
-        include_docs: true,
-        skip: 0,
-        limit: 1800,
-        // skip: 0,
-        // limit: 100, // 1/2 hour
-        descending: true,
-      }).then((data) => {
-        setRecent(data.rows.map(({ doc }) => doc).reverse());
+      remoteDb
+        .allDocs({
+          include_docs: true,
+          skip: 0,
+          limit: 100000, // 10 minutes
+          // skip: 0,
+          // limit: 100, // 1/2 hour
+          descending: true,
+        })
+        .then((data) => {
+          setRecent(data.rows.map(({ doc }) => doc).reverse());
+        });
+    };
+    const getChanges = () => {
+      remoteDb
+        .changes({
+          view: 'sensor_values/currentGrillTemp',
+          live: true,
+          since: "now",
+          include_docs: true
+        })
+        .on("change", function (change) {
+          console.log(change);
+        });
+    };
+    getChanges();
+
+    const getView = (whichView = "sensor_values/currentGrillTemp") => {
+      remoteDb.query(whichView).then((data) => {
+        console.log(whichView, data);
       });
     };
-    getRecent();
-    if (process.env.REACT_APP_LIVE === "true") {
-      console.log("Using live changes");
-      remoteDb.changes({
-        live: true,
-        since: "now",
-      }).on("change", function (change) {
-        getRecent();
-      });
-    }
+
+    
+    // getView('sensor_values/currentGrillTemp');
+    // getView('sensor_values/desiredGrillTemp');
+    // getRecent();
+    // if (process.env.REACT_APP_LIVE === "true") {
+    //   console.log("Using live changes");
+    //   remoteDb.changes({
+    //     live: true,
+    //     since: "now",
+    //   }).on("change", function (change) {
+    //     getRecent();
+    //   });
+    // }
   }, [setRecent]);
 
   useEffect(() => {
@@ -58,8 +83,10 @@ export const GrillStatusContextProvider = ({ children }) => {
     //   return values;
     // });
     const simplified = mapValues(mapped, (values, key) => {
-      const simplified = simplify(values, 0.8, true);
-      console.debug(`Simplified ${key} from ${values.length} to ${simplified.length}`);
+      const simplified = simplify(values, 0.1, true);
+      console.debug(
+        `Simplified ${key} from ${values.length} to ${simplified.length}`
+      );
       return simplified;
     });
     setRecentGrouppedByMetric(simplified);
@@ -77,7 +104,7 @@ export const GrillStatusContextProvider = ({ children }) => {
 
   useEffect(() => {
     setCurrent(recent.length > 0 ? last(recent) : {});
-  }, [recent])
+  }, [recent]);
 
   return (
     <GrillStatusContext.Provider
@@ -85,7 +112,7 @@ export const GrillStatusContextProvider = ({ children }) => {
         trends,
         recent,
         recentGrouppedByMetric,
-        current
+        current,
       }}
     >
       {children}
