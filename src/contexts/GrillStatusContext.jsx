@@ -15,7 +15,7 @@ export const GrillStatusContextProvider = ({ children }) => {
   const [trends, setTrends] = useState([]);
   useEffect(() => {
     const remoteDb = new PouchDB(
-      `http://${window.location.hostname}:5984/live_stream`
+      `http://${window.location.hostname}:5984/live_stream_2`
     );
     // const localDb = new PouchDB(`gmg-local-${process.env.REACT_APP_DB_NAME}`);
     // localDb.sync(remoteDb, { live: true, retry: true });
@@ -24,7 +24,7 @@ export const GrillStatusContextProvider = ({ children }) => {
         .allDocs({
           include_docs: true,
           skip: 0,
-          limit: 100000, // 10 minutes
+          limit: 60, // 10 minutes
           // skip: 0,
           // limit: 100, // 1/2 hour
           descending: true,
@@ -36,13 +36,12 @@ export const GrillStatusContextProvider = ({ children }) => {
     const getChanges = () => {
       remoteDb
         .changes({
-          view: 'sensor_values/currentGrillTemp',
           live: true,
           since: "now",
           include_docs: true
         })
         .on("change", function (change) {
-          console.log(change);
+          getRecent();
         });
     };
     getChanges();
@@ -52,6 +51,8 @@ export const GrillStatusContextProvider = ({ children }) => {
         console.log(whichView, data);
       });
     };
+
+    // getRecent();
 
     
     // getView('sensor_values/currentGrillTemp');
@@ -89,7 +90,7 @@ export const GrillStatusContextProvider = ({ children }) => {
       );
       return simplified;
     });
-    setRecentGrouppedByMetric(simplified);
+    setRecentGrouppedByMetric(mapped);
   }, [recent]);
 
   useEffect(() => {

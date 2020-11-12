@@ -16,6 +16,7 @@ import { LinePath } from "@visx/shape";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import Trendline from "./Trendline";
 import SparkLine from "./SparkLine";
+import RegressionLine from "./RegressionLine";
 
 // @todo break into legend, chart components and use ParentSize to make chart responsive
 function Example({ width = 1000, height = 300 }) {
@@ -116,6 +117,7 @@ function Example({ width = 1000, height = 300 }) {
                     {label.text}
                     <Trendline metric={label.datum} />
                     <SparkLine metric={label.datum} />
+                    <RegressionLine metric={label.datum} />
                   </LegendLabel>
                 </LegendItem>
               );
