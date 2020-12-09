@@ -15,7 +15,7 @@ export const GrillStatusContextProvider = ({ children }) => {
   const [trends, setTrends] = useState([]);
   useEffect(() => {
     const remoteDb = new PouchDB(
-      `http://${window.location.hostname}:5984/live_stream_2`
+      `http://${window.location.hostname}:5984/pi_second_run`
     );
     // const localDb = new PouchDB(`gmg-local-${process.env.REACT_APP_DB_NAME}`);
     // localDb.sync(remoteDb, { live: true, retry: true });
